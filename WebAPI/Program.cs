@@ -22,10 +22,12 @@ namespace WebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //Soit définir un CORS par défaut : 
             builder.Services.AddCors(
                 options =>
                 {
-                    options.AddPolicy("localPolicy", policy => { 
+                    options.AddDefaultPolicy(policy => { 
                         policy
                             //.WithOrigins("http://127.0.0.1:5500")
                             .AllowAnyOrigin()
@@ -33,6 +35,19 @@ namespace WebAPI
                             .AllowAnyMethod();
                     });
                 });
+
+            //Soit nommé les règles du CORS, pour une application plus sélective :
+            /*builder.Services.AddCors(
+                options =>
+                {
+                    options.AddPolicy("localPolicy", policy => {
+                        policy
+                            //.WithOrigins("http://127.0.0.1:5500")
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+                });*/
 
             var app = builder.Build();
 
@@ -43,7 +58,10 @@ namespace WebAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseCors("localPolicy");
+            //Si CORS par défaut :
+            app.UseCors();
+            //Si CORS nommé :
+            //app.UseCors("localPolicy");
 
             app.UseHttpsRedirection();
 
