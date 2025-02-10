@@ -14,12 +14,14 @@ namespace WebAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors(
-                policy =>
+                options =>
                 {
-                    policy.AddDefaultPolicy(options => { 
-                        options.AllowAnyHeader();
-                        options.AllowAnyMethod();
-                        options.AllowAnyOrigin();
+                    options.AddPolicy("localPolicy", policy => { 
+                        policy
+                            //.WithOrigins("http://127.0.0.1:5500")
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
                     });
                 });
 
@@ -32,12 +34,11 @@ namespace WebAPI
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("localPolicy");
+
             app.UseHttpsRedirection();
 
-            app.UseCors();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 
