@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\I3-WAD24-API-DemoDAL\BLL\BLL.csproj" />
-    <ProjectReference Include="..\..\I3-WAD24-API-DemoDAL\Common\Common.csproj" />
-    <ProjectReference Include="..\..\I3-WAD24-API-DemoDAL\DAL\DAL.csproj" />
+    <ProjectReference Include="..\BLL\BLL.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\DAL\DAL.csproj" />
   </ItemGroup>
 
 </Project>
