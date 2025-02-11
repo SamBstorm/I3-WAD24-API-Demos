@@ -39,27 +39,92 @@ namespace WebAPI.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        [ProducesResponseType<UserDTO>(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult Get(Guid id)
         {
-            return "value";
+            try
+            {
+                UserDTO? model = _userService.Get(id).ToDTO();
+                if (model is null) throw new ArgumentOutOfRangeException(nameof(id));
+                return Ok(model);
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return NotFound();
+            }
         }
 
         // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [ProducesResponseType<UserDTO>(201)]
+        [ProducesResponseType(500)]
+        public IActionResult Post([FromBody] UserPostDTO value)
         {
+            try
+            {
+                Guid id = _userService.Insert(value.ToBLL());
+                UserDTO model = _userService.Get(id).ToDTO();
+                return CreatedAtAction(nameof(Get), new { id }, model);
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500);
+            }
         }
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [ProducesResponseType<UserDTO>(201)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult Put(Guid id, [FromBody] UserPutDTO value)
         {
+            try
+            {
+                UserDTO? model = _userService.Get(id).ToDTO();
+                if (model is null) throw new ArgumentOutOfRangeException(nameof(id));
+                _userService.Update(id, value.ToBLL());
+                model = _userService.Get(id).ToDTO();
+                return CreatedAtAction(nameof(Get), new { id }, model);
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return NotFound();
+            }
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult Delete(Guid id)
         {
+            try
+            {
+                UserDTO? model = _userService.Get(id).ToDTO();
+                if (model is null) throw new ArgumentOutOfRangeException(nameof(id));
+                _userService.Delete(id);
+                return NoContent();
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return NotFound();
+            }
         }
     }
 }
