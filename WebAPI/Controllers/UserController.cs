@@ -123,5 +123,27 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
         }
+
+        [HttpPost("CheckPassword")]
+        [ProducesResponseType<UserDTO>(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public IActionResult CheckPassword([FromQuery] string email, [FromQuery] string password)
+        {
+            try
+            {
+                Guid id = _userService.CheckPassword(email, password);
+                UserDTO model = _userService.Get(id).ToDTO();
+                return Ok(model);
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500);
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
+        }
     }
 }
