@@ -27,9 +27,11 @@ namespace WebAPI
             builder.Services.AddCors(
                 options =>
                 {
-                    options.AddDefaultPolicy(policy => { 
+                    options.AddDefaultPolicy(policy => {
                         policy
                             //.WithOrigins("http://127.0.0.1:5500")
+                            //.WithHeaders(["Accept", "application/json"])
+                            //.WithMethods("GET", "POST");
                             .AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
