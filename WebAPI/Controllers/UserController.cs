@@ -46,8 +46,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                UserDTO? model = _userService.Get(id).ToDTO();
-                if (model is null) throw new ArgumentOutOfRangeException(nameof(id));
+                UserDTO model = _userService.Get(id).ToDTO();
                 return Ok(model);
             }
             catch (SqlException)
@@ -87,8 +86,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                UserDTO? model = _userService.Get(id).ToDTO();
-                if (model is null) throw new ArgumentOutOfRangeException(nameof(id));
+                UserDTO model = _userService.Get(id).ToDTO();
                 _userService.Update(id, value.ToBLL());
                 model = _userService.Get(id).ToDTO();
                 return CreatedAtAction(nameof(Get), new { id }, model);
@@ -112,8 +110,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                UserDTO? model = _userService.Get(id).ToDTO();
-                if (model is null) throw new ArgumentOutOfRangeException(nameof(id));
+                UserDTO model = _userService.Get(id).ToDTO();
                 _userService.Delete(id);
                 return NoContent();
             }
